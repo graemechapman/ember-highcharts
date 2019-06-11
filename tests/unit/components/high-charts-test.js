@@ -4,6 +4,14 @@ import { setupTest } from 'ember-qunit';
 module('Unit | Component | high-charts', function(hooks) {
   setupTest(hooks);
 
+  function SpecialObject() {
+    this.meta = {
+      foo: 'bar'
+    };
+  }
+
+  this.specialInstance = new SpecialObject();
+
   this.sampleTheme = {
     colors: ['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'],
     title: {
@@ -25,6 +33,15 @@ module('Unit | Component | high-charts', function(hooks) {
       },
       itemHoverStyle: {
         color: 'gray'
+      }
+    },
+    plotOptions: {
+      line: {
+        zones: [
+          {
+            value: this.specialInstance
+          }
+        ]
       }
     }
   };
@@ -71,6 +88,15 @@ module('Unit | Component | high-charts', function(hooks) {
       itemHoverStyle: {
         color: 'blue'
       }
+    },
+    plotOptions: {
+      line: {
+        zones: [
+          {
+            value: this.specialInstance
+          }
+        ]
+      }
     }
   };
 
@@ -95,5 +121,7 @@ module('Unit | Component | high-charts', function(hooks) {
     });
     let mergedChartOptions = component.get('buildOptions');
     assert.deepEqual(mergedChartOptions, this.postMergeOptions);
+
+    assert.ok(mergedChartOptions.plotOptions.line.zones[0].value instanceof SpecialObject);
   });
 });
