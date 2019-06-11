@@ -7,6 +7,7 @@ import { setDefaultHighChartOptions } from '../utils/option-loader';
 import { getSeriesMap, getSeriesChanges } from '../utils/chart-data';
 import layout from 'ember-highcharts/templates/components/high-charts';
 import merge from 'deepmerge';
+import isPlainObject from 'is-plain-object';
 
 /* Map ember-highcharts modes to Highcharts methods
  * https://api.highcharts.com/class-reference/Highcharts.html
@@ -31,7 +32,9 @@ export default Component.extend({
     let theme = getWithDefault(this, 'theme', {});
     let passedChartOptions = getWithDefault(this, 'chartOptions', {});
 
-    let chartOptions = merge(theme, passedChartOptions);
+    let chartOptions = merge(theme, passedChartOptions, {
+      isMergeableObject: isPlainObject
+    });
     let chartContent = get(this, 'content');
 
     // if 'no-data-to-display' module has been imported, keep empty series and leave it to highcharts to show no data label.
